@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .top{
+            width: 500px;
+            height: 60px;
+            margin: 40px auto;
+            background: pink;
+        }
+    </style>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+       $(function () {
+           $.ajax({
+               url:'http://localhost:3000/item',
+               type:'POST',
+               dataType:'json',
+               data:{title:$('#one').val(),message:$('#two').val()},
+               success:function (e) {
+                   for(i in e){
+                       console.log(e)
+                       ///  $('body').append('<div><h2>${e[i].title}</h2><p>${e[i].message}</p></div>')
+                       $('#liuyan').append("<div><h2>"+e[i].title+"</h2><p>"+e[i].message+"</p><span data-id='"+e[i].id+"'>X</span></div>")
+                   }
+                   $('span').click(function () {
+                       console.log(1)
+                       var q=$(this).attr('data-id')
+                       var s=$(this)
+                       $.ajax({
+                           url:'http://localhost:3000/item/del',
+                           type:'post',
+                           dataType:'json',
+                           data:{id:q},
+                           success:function (e) {
+                               s.parent('div').remove();//parent父级
+                           }
+                       })
+                   })
+               }
+           })
+           $('#three').click(function(){
+               $.ajax({
+                   url:'http://localhost:3000/item/insert',
+                   type:'post',
+                   data:{title:$('#one').val(),message:$('#two').val()},
+                   dataType:'json',
+                   success:function (e) {
+                       $.ajax({
+                           url:'http://localhost:3000/item',
+                           type:'POST',
+                           dataType:'json',
+                           data:{title:$('#one').val(),message:$('#two').val()},
+                           success:function (e) {
+                               $("#liuyan").html("")
+                               for(i in e){
+//                                   console.log(e)
+                                   ///  $('body').append('<div><h2>${e[i].title}</h2><p>${e[i].message}</p></div>')
+                                   $('#liuyan').append("<div><h2>"+e[i].title+"</h2><p>"+e[i].message+"</p><span data-id='"+e[i].id+"'>X</span></div>")
+                               }
+                               $('span').click(function () {
+                                   console.log(1)
+                                   var q=$(this).attr('data-id')
+                                   var s=$(this)
+                                   $.ajax({
+                                       url:'http://localhost:3000/item/del',
+                                       type:'post',
+                                       dataType:'json',
+                                       data:{id:q},
+                                       success:function (e) {
+                                           s.parent('div').remove();//parent父级
+                                       }
+                                   })
+                               })
+                           }
+                       })
+                   }
+               })
+           })
+       })
+    </script>
+</head>
+<body>
+<div class="top">
+    <h4>留言板</h4>
+    <input type="text" id="one" placeholder="请输入名字">
+    <input type="text" id="two" placeholder="请输入内容">
+    <input type="submit" id="three">
+</div>
+<div id="liuyan">
+
+</div>
+</body>
+</html>
