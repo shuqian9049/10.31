@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #top{
+            position: relative;
+            width: 300px;
+            height: 30px;
+        }
+        .glyphicon{
+            position: absolute;
+            left: -30px;
+            top: 5px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            $('.btn').click(function () {
+                var id=$('#top').val()
+                console.log(id)
+                $.ajax({
+                    url:'http://localhost:3000/item/du',
+                    type:'post',
+                    data:{id:id},
+                    dataType:'json',
+                    success:function (e) {
+                        console.log(e)
+                        var s='';
+                        for(i in e){
+                            s+=`<div>${e[i].id}<p>${e[i].name}</p><span>${e[i].detail}</span></div>`
+                        }
+                        $('.shu').html(s)
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<input type="text" id="top">
+<div class="glyphicon glyphicon-search"></div>
+<button type="button" class="btn btn-default">搜索</button>
+<div class="shu"></div>
+</body>
+</html>
